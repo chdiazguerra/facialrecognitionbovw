@@ -1,0 +1,25 @@
+sift:
+  nfeatures: 0
+  nOctaveLayers: 3
+  contrastThreshold: 0.04
+  edgeThreshold: 10
+  sigma: 1.6
+
+brisk:
+  thresh: 30
+  octaves: 3
+  patternScale: 1.0
+
+orb:
+  nfeatures: 500
+  scaleFactor: 1.2
+  nlevels: 8
+  edgeThreshold: 31
+  patchSize: 31
+
+daisy:
+  step: 4
+  radius: 15
+  rings: 3
+  histograms: 8
+  orientations: 8
