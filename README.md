@@ -28,6 +28,7 @@ El cual lee los datos descargados con el script anterior y crea un archivo json 
     [
         "nombre": nombre_imagen,
         "clase": clase_imagen,
+        "clase_str": "f{N°}"/m{N°}"
         "split": "train"/"test"
     ]
 
@@ -45,14 +46,14 @@ La configuración de este método (y los demás) puede ser configurada con el ar
 Para realizar la codificación de este, primero se debe ejecutar para el dataset de entrenamiento. Esto se realiza utilizando
 
 ```bash
-python src/models/encode_train.py --file_features data/features_sift.pkl
+python src/models/encode_train.py --file_features data/features_{method}.pkl
 ```
 En la carpeta *models* se entregan modelos preentrenados con la configuración utilizada en nuestro caso. Este puede ser utilizado indicandolo en el script anterior agregando al final *--file_kmeans \[FILE\]*.
 
 Para realizar la codificacion para test, se utiliza
 
 ```bash
-python src/models/encode_test.py --file_features data/features_sift.pkl
+python src/models/encode_test.py --file_features data/features_{method}.pkl --path_kmeans models/kmeans_{method}.pkl
 ```
 Aquí también se puede utilizar el modelo preentrenado entregado.
 
@@ -71,6 +72,22 @@ Para la predicción en el dataset de test, se utiliza
 python src/models/predict_model.py --file_encoding data/encoding_test_{method}.pkl --file_model models/RF_{method}.pkl
 ```
 Esto mostrará el accuracy alcanzado, además de generar un json con las predicciones realizadas.
+
+## Classify own image
+
+Para realizar la clasificacion de una imagen cualquiera, se provee el script *predict\_single\_img.py*. Para su ejecución, se debe utilizar
+
+```bash
+python predict_single_img.py --path_img {path} --features_method {method} --knn_model {model} --classifier {classifier}
+```
+
+## Notebooks
+
+Para facilitar la visualizacion de las features y los resultados obtenidos en test, se proveen dos Jupyter Notebooks que se encuentran en la carpeta *notebooks*.
+
+## Results
+
+Los resultados obtenidos pueden obtenerse desde [RESULTS](reports/README.md). Estos fueron obtenidos utilizando las configuraciones y modelos entregados, junto con la [partición](data.json) entregada. 
 
 --------
 
