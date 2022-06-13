@@ -10,7 +10,6 @@ python script.py -h
 ```
 
 ## Dataset
----------
 
 Este proyecto es probado en la base de datos <a target="_blank" href="http://pics.psych.stir.ac.uk/">PICS</a>, para su dataset <a target="_blank" href="http://pics.psych.stir.ac.uk/zips/pain.zip">Pain</a>. Se provee un script para realizar su descarga, el cual puede ser ejecutado utilizando
 
@@ -33,7 +32,6 @@ El cual lee los datos descargados con el script anterior y crea un archivo json 
     ]
 
 ## Feature Extraction
----------
 
 Para la extracción de las features de cada imagen, se tienen cuatro métodos implementados: SIFT, BRISK, ORB y DAISY. Para el primer caso, se debe ejecutar
 
@@ -43,7 +41,6 @@ python src/features/build_features.py --features_method sift
 La configuración de este método (y los demás) puede ser configurada con el archivo *config.yaml* de la carpeta *src/features*.
 
 ## Encoding
----------
 
 Para realizar la codificación de este, primero se debe ejecutar para el dataset de entrenamiento. Esto se realiza utilizando
 
@@ -60,7 +57,6 @@ python src/models/encode_test.py --file_features data/features_sift.pkl
 Aquí también se puede utilizar el modelo preentrenado entregado.
 
 ## Classification
----------
 
 Para clasificar cada imagen, primeramente se crea el clasificador. Este puede ser Random Forest (RF), SVM o XGBoost, cuyas configuraciones pueden ser cambiadas desde el archivo *config.yaml* de la carpeta *src/models*. Para su entrenamiento se debe ejecutar
 
