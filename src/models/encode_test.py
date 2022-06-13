@@ -59,6 +59,8 @@ if __name__=="__main__":
     parser.add_argument("--file_features",
                         help="Path del archivo con las features (features_method.pkl)",
                         type=str, required=True)
+    parser.add_argument("--path_kmeans", help="Path del modelo KMeans entrenado",
+                        type=str, required=True)
     parser.add_argument("--out_encoding", help="Carpeta en donde se guarda el archivo de salida",
                         nargs="?", type=str, default="data")
     parser.add_argument("--out_model",
@@ -66,8 +68,6 @@ if __name__=="__main__":
                         nargs="?", type=str, default="models")
     parser.add_argument("--dataset_file", help="Archivo json con los datos del dataset",
                         nargs="?", type=str, default="data/data.json")
-    parser.add_argument("--path_kmeans", help="Path del modelo KMeans entrenado",
-                        nargs="?", type=str, default="models/kmeans_sift.pkl")
     parser.add_argument("--file_knn",
                         help="Path del archivo con el modelo KNN ya entrenado",
                         nargs="?", type=str)
@@ -79,6 +79,10 @@ if __name__=="__main__":
 
     if not os.path.isfile(args.file_features):
         print("No existe el archivo con las features")
+        sys.exit()
+    
+    if args.file_knn and not os.path.isfile(args.path_kmeans):
+        print("No existe el archivo con el modelo KMeans")
         sys.exit()
 
     if not os.path.isfile(args.dataset_file):

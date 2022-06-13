@@ -46,6 +46,8 @@ def create_dataset(args: argparse.Namespace):
             clases.append(clases_dict[clase])
             names.append(name)
 
+        id2s = {v: k for k, v in clases_dict.items()}
+
         X_train, X_test, y_train, y_test = train_test_split(
                                             names, clases, test_size=args.test_split,
                                             stratify=clases,
@@ -55,12 +57,14 @@ def create_dataset(args: argparse.Namespace):
         for nombre, clase in zip(X_train, y_train):
             datos = {"nombre": nombre,
                     "clase": clase,
+                    "clase_str": id2s[clase],
                     "split": "train"}
             dataset.append(datos)
 
         for nombre, clase in zip(X_test, y_test):
             datos = {"nombre": nombre,
                     "clase": clase,
+                    "clase_str": id2s[clase],
                     "split": "test"}
             dataset.append(datos)
 

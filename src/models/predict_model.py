@@ -35,13 +35,16 @@ def predict(args):
     classifier.load_model(args.file_model)
 
     pred = classifier.predict(X_test)
+    preds_str = classifier.predict(X_test, name=True)
 
-    preds_dict = {}
-    for nombre, p in zip(data.nombre, pred):
-        preds_dict[nombre] = int(p)
+    preds_list = []
+    for nombre, p, p_str in zip(data.nombre, pred, preds_str):
+        preds_list.append({"nombre": nombre,
+                            "prediccion": int(p),
+                            "pred_str": p_str})
 
     with open(os.path.join(args.out_pred, f"pred_{method}.json"), "w", encoding="utf-8") as file:
-        json.dump(preds_dict, file)
+        json.dump(preds_list, file)
 
     acc = sum(y_test==pred)/len(y_test)
     print("Accuracy test:")

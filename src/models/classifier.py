@@ -2,6 +2,7 @@
 """
 
 from dataclasses import dataclass
+from typing import Union
 import os
 import numpy
 import pickle
@@ -53,7 +54,7 @@ class Classifier:
             else:
                 raise Exception("No existe el tipo de modelo especificado")
 
-    def train_model(self, X_train: numpy.ndarray, y_train: numpy.ndarray):
+    def train_model(self, X_train: numpy.ndarray, y_train: numpy.ndarray, classes_names: list):
         """Entrena el modelo de clasificacion escogido
 
         Parameters
@@ -62,6 +63,8 @@ class Classifier:
             Features de entrenamiento
         y_train : numpy.ndarray
             Clases de entrenamiento
+        classes_names : list
+            Nombres de las clases
         """
         if self.model_type=="XGBoost":
             X_train, X_val, y_train, y_val = train_test_split(X_train, y_train,
@@ -69,6 +72,8 @@ class Classifier:
             self.model.fit(X_train, y_train, eval_set=[(X_val, y_val)], early_stopping_rounds=10)
         else:
             self.model.fit(X_train, y_train)
+
+        self.model.classes_names = numpy.array(classes_names)
     
     def save_model(self, path: str):
         """Guarda el modelo entrenado
@@ -95,17 +100,20 @@ class Classifier:
         except FileNotFoundError:
             print("No existe el modelo guardado")
         
-    def predict(self, x: numpy.ndarray) -> numpy.ndarray:
+    def predict(self, x: numpy.ndarray, name: bool = False) -> Union[numpy.ndarray, str]:
         """Realiza la prediccion de la feature de entrada
 
         Parameters
         ----------
         x : numpy.ndarray
             Feature de entrada
+        name : bool, default=False
+            True si entrega el nombre
 
         Returns
         -------
         numpy.ndarray
             Prediccion
         """
-        return self.model.predict(x)
+        pred = self.model.predict(x)
+        return  pred if not name else self.model.classes_names[pred]

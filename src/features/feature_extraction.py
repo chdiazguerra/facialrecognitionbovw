@@ -2,14 +2,46 @@
 de las features de cada imagen.
 """
 
+from abc import abstractmethod
 from dataclasses import dataclass
+import sys
+
+import yaml
 import numpy
 import cv2
 import skimage
 import matplotlib.pyplot as plt
 
+class Extractor:
+    @abstractmethod
+    def extract(self, img_path: str) -> numpy.ndarray:
+        """Entrega el feature de la imagen
+
+        Parameters
+        ----------
+        img_path : str
+            Path de la imagen a convertir
+
+        Returns
+        -------
+        numpy.ndarray
+            Feature de la imagen
+        """
+        pass
+
+    @abstractmethod
+    def visualize(self, img_path: str):
+        """Muestra los keypoints utilizados por el descriptor
+
+        Parameters
+        ----------
+        img_path : str
+            Path de la imagen a visualizar
+        """
+        pass
+
 @dataclass
-class SIFT:
+class SIFT(Extractor):
     """Implementa la extraccion por caracteristicas SIFT
 
     Attributes
@@ -61,7 +93,7 @@ class SIFT:
         img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
         _, des = self.sift.detectAndCompute(img, mask=None)
         return des
-    
+
     def visualize(self, img_path: str):
         """Muestra los keypoints utilizados por el descriptor
 
@@ -81,7 +113,7 @@ class SIFT:
 
 
 @dataclass
-class BRISK:
+class BRISK(Extractor):
     """Implementa la extraccion por caracteristica BRISK
 
     Attributes
@@ -141,7 +173,7 @@ class BRISK:
 
 
 @dataclass
-class ORB:
+class ORB(Extractor):
     """Implementa la extraccion de caracteristicas ORB
 
     Attributes
@@ -211,7 +243,7 @@ class ORB:
 
 
 @dataclass
-class DAISY:
+class DAISY(Extractor):
     """Implementa la extraccion de caracteristicas Daisy
 
     Attributes
@@ -283,3 +315,41 @@ class DAISY:
         plt.imshow(keypoints)
         plt.axis("off")
         plt.show()
+
+
+def get_extractor(config_file: str, features_method: str) -> Extractor:
+    """Entrega el metodo de extraccion de caracteristicas correspondiente
+
+    Parameters
+    ----------
+    config_file : str
+        Archivo de configuracion del metodo escogido
+    features_method : str
+        Metodo de extraccion
+
+    Returns
+    -------
+    Extractor
+        Instancia del metodo de extraccion escogido
+    """
+    with open(config_file, "r", encoding="utf-8") as file:
+        config = yaml.safe_load(file)
+
+    method = features_method
+
+    config_method = config.get(method, None)
+
+    if config_method is None:
+        print("No existe la configuracion para el metodo escogido")
+        sys.exit()
+
+    if method=="sift":
+        extractor = SIFT(**config_method)
+    if method=="brisk":
+        extractor = BRISK(**config_method)
+    if method=="orb":
+        extractor = ORB(**config_method)
+    if method=="daisy":
+        extractor = DAISY(**config_method)
+
+    return extractor

@@ -26,6 +26,9 @@ def entrenar(args):
     for i, (nombre, clase) in data[["nombre", "clase"]].iterrows():
         X_train.append(encodings[nombre])
         y_train.append(clase)
+    
+    id2s = {i: s for i, s in data.groupby(["clase", "clase_str"]).groups}
+    id2s = [id2s[i] for i in range(len(id2s))]
 
     X_train = numpy.vstack(X_train)
     y_train = numpy.array(y_train)
@@ -34,7 +37,7 @@ def entrenar(args):
 
     if not args.file_model:
         print("Entrenando modelo")
-        classifier.train_model(X_train, y_train)
+        classifier.train_model(X_train, y_train, id2s)
         path = os.path.join(args.out_model, f"{args.model_type}_{method}.pkl")
 
         if not os.path.isdir(args.out_model):
