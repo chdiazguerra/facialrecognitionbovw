@@ -34,6 +34,10 @@ def encode_train(args):
         print("Entrenando modelo")
         kmeans.train(X_train)
         path = os.path.join(args.out_model, "kmeans_"+method)
+
+        if not os.path.isdir(args.out_model):
+            os.mkdir(args.out_model)
+
         kmeans.save_model(path)
         args.file_kmeans = path
 
