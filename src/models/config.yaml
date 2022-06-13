@@ -1,0 +1,23 @@
+RF:
+  n_estimators: 100
+  random_state: 0
+  criterion: gini
+
+SVM:
+  C: 1.0
+  kernel: rbf
+  degree: 3
+  decision_function_shape: ovr
+  random_state: 0
+
+XGBoost:
+  verbosity: 1
+  learning_rate: 0.3
+  max_depth: 6
+  booster: gbtree
+  min_child_weight: 1
+  grow_policy: depthwise
+  reg_alpha: 0.0
+  reg_lambda: 1.0
+  objective: multi:softmax
+  n_estimators: 100
